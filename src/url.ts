@@ -1,29 +1,9 @@
 import { retryCollector, RetryStatistics } from './collector'
 import { retryTimesProp, failedProp, succeededProp } from './constants'
 
-export type Domain = string[] | { [x: string]: string }
+export type Domain =  { [x: string]: string }
 export interface DomainMap {
     [x: string]: string
-}
-
-/**
- * generate the domain map from user
- * @example
- * generateDomainMap(['a.cdn', 'b.cdn', 'c.cdn']) // {'a.cdn': 'b.cdn', 'b.cdn': 'c.cdn', 'c.cdn': 'a.cdn'}
- *
- * @param {Domain} domains
- * @returns {DomainMap}
- */
-export const prepareDomainMap = function(domains: Domain): DomainMap {
-    // array
-    if (Array.isArray(domains)) {
-        return domains.reduce(function(domainMap, domain, idx, array) {
-            domainMap[domain] = array[(idx + 1) % array.length]
-            return domainMap
-        }, {} as DomainMap)
-    }
-    // object
-    return domains
 }
 
 /**

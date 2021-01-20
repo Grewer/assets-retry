@@ -1,36 +1,37 @@
 import {
     collectPropertyNames,
-    stringReplace,
+    hasOwn,
     isFunctionProperty,
     loadNextScript,
+    noop,
     safeCall,
-    hasOwn,
-    noop
+    stringReplace
 } from './util'
 
 import {
-    retryTimesProp,
-    succeededProp,
-    failedProp,
-    maxRetryCountProp,
-    onRetryProp,
+    doc,
     domainProp,
-    innerScriptProp,
-    innerOnloadProp,
-    innerOnerrorProp,
-    scriptTag,
+    failedProp,
     hookedIdentifier,
     ignoreIdentifier,
-    doc,
+    innerOnerrorProp,
+    innerOnloadProp,
+    innerScriptProp,
+    maxRetryCountProp,
+    onRetryProp,
+    retryTimesProp,
     ScriptElementCtor,
+    scriptTag,
+    succeededProp
 } from './constants'
 import { retryCollector } from './collector'
-import { prepareDomainMap, extractInfoFromUrl } from './url'
+import { extractInfoFromUrl } from './url'
 import { InnerAssetsRetryOptions } from './assets-retry'
 
 export interface HookedScript {
     [innerScriptProp]: HTMLScriptElement
     [innerOnerrorProp]: (e: Partial<Event>) => void
+
     [x: string]: any
 }
 
@@ -38,10 +39,11 @@ export interface HookedScript {
 // (including prototype properties) because it's big (length > 200)
 // otherwise it would be calculated every time when
 // a script request failed.
-let scriptProperties: string[];
+let scriptProperties: string[]
 try {
     scriptProperties = collectPropertyNames(ScriptElementCtor.prototype)
-} catch (_) { /* noop */ }
+} catch (_) { /* noop */
+}
 
 /**
  * create the descriptor of hooked script object,
@@ -55,7 +57,7 @@ try {
  */
 const getHookedScriptDescriptors = function(self: HookedScript, opts: InnerAssetsRetryOptions) {
     const maxRetryCount = opts[maxRetryCountProp]
-    const domainMap = prepareDomainMap(opts[domainProp])
+    const domainMap = opts[domainProp]
     const onRetry = opts[onRetryProp]
     return scriptProperties.reduce(function(descriptor, key) {
         const isFn = isFunctionProperty(ScriptElementCtor.prototype, key)
@@ -184,7 +186,7 @@ const hookPrototype = function(target: any) {
         const originalFunc = target[key]
         target[key] = function(): any {
             const args = [].slice.call(arguments).map((item: any) => {
-                if (!item) return item;
+                if (!item) return item
                 return hasOwn.call(item, innerScriptProp) ? item[innerScriptProp] : item
             })
             return originalFunc.apply(this, args)

@@ -1,2 +1,87 @@
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):(t=t||self).assetsRetry=e()}(this,function(){"use strict";function a(t){return t}function y(){}function r(t,e){try{return"function"==typeof t[e]}catch(t){return!1}}function p(t){return Array.isArray(t)?t.reduce(function(t,e,n,r){return t[e]=r[(n+1)%r.length],t},{}):t}function h(e,t){return Object.keys(t).filter(function(t){return-1<e.indexOf(t)}).sort(function(t,e){return e.length-t.length})[0]}var e,m="retryTimes",b="succeeded",E="failed",O="maxRetryCount",j="onRetry",f="onSuccess",s="onFail",w="domain",v="_assetsRetryScript",g="_assetsRetryOnerror",l="script",A="data-assets-retry-hooked",S="data-assets-retry-ignore",k="data-retry-id",d=window,R=window.document,n=d.HTMLElement,L=d.HTMLScriptElement,c=d.HTMLStyleElement,T=d.HTMLLinkElement,x=d.HTMLImageElement,o=Object.prototype.hasOwnProperty,_=function(t,e,n){var r=t.indexOf(e);return-1===r?t:t.substring(0,r)+n+t.substring(r+e.length)},M=function(t){return[].slice.call(t)},N=function(e,t,n,r){void 0===n&&(n=y),void 0===r&&(r=!1);var o,i,c,u,a,f=r||e.defer||e.async;"loading"!==R.readyState||/Edge|MSIE|rv:/i.test(navigator.userAgent)||f?(o=R.createElement(l),Object.keys(L.prototype).forEach(function(t){if("src"!==t&&e[t]&&"object"!=typeof e[t])try{o[t]=e[t]}catch(t){}}),o.src=t,o.onload=e.onload,o.onerror=e.onerror,o.setAttribute(k,C()),(i=e.getAttribute("nonce"))&&o.setAttribute("nonce",i),R.getElementsByTagName("head")[0].appendChild(o)):(c=C(),u=e.outerHTML.replace(/data-retry-id="[^"]+"/,"").replace(/src=(?:"[^"]+"|.+)([ >])/,k+"="+c+' src="'+t+'"$1'),R.write(u),(a=R.querySelector("script["+k+'="'+c+'"]'))&&(a.onload=n))},H=function(e){try{return e.rules}catch(t){try{return e.cssRules}catch(t){return null}}},I=function(e,t,n){var r=R.createElement("link");Object.keys(T.prototype).forEach(function(t){if("href"!==t&&e[t]&&"object"!=typeof e[t])try{r[t]=e[t]}catch(t){}}),r.href=t,r.onload=n,r.setAttribute(k,C()),R.getElementsByTagName("head")[0].appendChild(r)},P=function(t){return t?t instanceof n?[t.nodeName,t.src,t.href,t.getAttribute(k)].join(";"):"not_supported":"null"},C=function(){return Math.random().toString(36).slice(2)},B=function(t){return t instanceof L||t instanceof x?t.src:t instanceof T?t.href:null},F={},$=function(t,e){var n,r=q(t,e),o=r[0],i=r[1];return o?(F[o]=F[o]||((n={})[m]=0,n[E]=[],n[b]=[],n),[i,F[o]]):[]},q=function(t,e){var n,r,o=h(t,e);return o?[(r=o,(n=t).substr(n.indexOf(r)+r.length,n.length)),o]:["",""]};try{e=function(t){for(var e=Object.getPrototypeOf?Object.getPrototypeOf:function(t){return t.__proto__},n=Object.keys(t);e(t);)n=n.concat(Object.keys(e(t))),t=e(t);return n.filter(function(t){return"constructor"!==t})}(L.prototype)}catch(t){}function i(f,t){var s=t[O],l=p(t[w]),d=t[j];return e.reduce(function(t,e){var n=r(L.prototype,e);return t[e]=n?{value:function(){return f[v][e].apply(f[v],arguments)}}:{set:function(o){return"onerror"===e?(f[g]=o,void(f[v].onerror=function(r){r.stopPropagation&&r.stopPropagation();function t(){return t=f[g],e=f[v],n=r,"function"!=typeof t?null:t.call(e,n);var t,e,n}var e=f[v].src,n=$(e,l),o=n[0],i=n[1],c=f[v].hasAttribute(S);if(!o||!i||c)return t();var u=_(e,o,l[o]),a=d(u,e,i);if(null===a)return t();if("string"!=typeof a)throw new Error("a string should be returned in `onRetry` function");i[m]<=s?N(f[v],a,y,!0):t()})):"onload"===e?(f._assetsRetryOnload=o,void(f[v].onload=function(t){var e=f[v].src,n=$(e,l),r=(n[0],n[1]);r&&-1===r[E].indexOf(e)&&r[b].push(e),o&&!o._called&&(o._called=!0,o.call(f[v],t))})):void(f[v][e]=o)},get:function(){return f[v][e]}},t},{})}var z=function(n){var r=R.createElement;R.createElement=function(t,e){return t===l?function(t,e){var n;t.setAttribute(A,"true");var r=((n={})[v]=t,n[g]=y,n),o=i(r,e);return Object.defineProperties(r,o),r}(r.call(R,l),n):r.call(R,t,e)},R.createElement.toString=function(){return"function createElement() { [native code] }"}},Z=function(n){Object.keys(n).filter(function(t){return r(n,t)}).forEach(function(t){var e=n[t];n[t]=function(){var t=[].slice.call(arguments).map(function(t){return t&&o.call(t,v)?t[v]:t});return e.apply(this,t)},/^\w+$/.test(t)&&(n[t].toString=new Function("return 'function "+t+"() { [native code] }'"))})};var D={};function G(p){function c(t){if(t){var e=t.target||t.srcElement,n=B(e);if(n){var r=$(n,g),o=r[0],i=r[1],c=e instanceof HTMLElement&&e.hasAttribute(S);if(i&&o&&!c){i[m]++,i[E].push(n);var u,a=i[m]>p[O];if(a&&(u=q(n,g)[0],v(u)),g[o]&&!a){var f=g[o],s=_(n,o,f),l=h(s,n,i);if(null!==l){if("string"!=typeof l)throw new Error("a string should be returned in `onRetry` function");var d,y=P(e);D[y]||(D[y]=!0,d=function(){i[b].push(l)},e instanceof L&&!e.getAttribute(A)&&e.src?N(e,l,d):e instanceof T&&e.href?I(e,l,d):e instanceof x&&e.src&&(e.setAttribute(k,C()),e.src=l,e.onload=d))}}}}}}var h=p[j],u=p[f],v=p[s],g=p[w];R.addEventListener("error",c,!0),R.addEventListener("load",function(t){var e,n,r,o,i;t&&(e=t.target||t.srcElement,(n=B(e))&&(e.getAttribute(k)&&(r=q(n,g)[0],u(r)),e instanceof T&&R.styleSheets&&(o=M(R.styleSheets).filter(function(t){return t.href===e.href})[0],null!==(i=H(o))&&0===i.length&&c(t))))},!0)}function u(t,e,n,r,o){var i=o[w],c=o[j],u=e.style&&e.style[t];if(u&&!/^url\(["']?data:/.test(u)){var a=u.match(/^url\(["']?(.+?)["']?\)/)||[],f=a[1];if(f){var s=h(f,i);if(s&&i[s]){var l=Object.keys(i).map(function(t){var e=_(f,s,t);return'url("'+c(e,f,null)+'")'}).join(","),d=e.selectorText+("{ "+t.replace(/([a-z])([A-Z])/g,function(t,e,n){return e+"-"+n.toLowerCase()}))+": "+l+" !important; }";try{n.insertRule(d,r.length)}catch(t){n.insertRule(d,0)}}}}}var J={},K=[],Q=function(t,o){var i=["backgroundImage","borderImage","listStyleImage"];t.forEach(function(n){var r,t=H(n);null!==t&&((r=M(t)).forEach(function(e){i.forEach(function(t){u(t,e,n,r,o)})}),n.href&&(J[n.href]=!0),n.ownerNode instanceof c&&K.push(n.ownerNode))})},U=function(t,n){return M(t).filter(function(t){if(!H(t))return!1;if(t.href)return!J[t.href]&&!!h(t.href,n);var e=t.ownerNode;return!(e instanceof c&&-1<K.indexOf(e))})};return function(t){var e,n,r,o;void 0===t&&(t={});try{if("object"!=typeof t[w])throw new Error("opts.domain cannot be non-object.");var i=[O,j,f,s,w],c=Object.keys(t).filter(function(t){return-1===i.indexOf(t)});if(0<c.length)throw new Error("option name: "+c.join(", ")+" is not valid.");var u=((e={})[O]=t[O]||3,e[j]=t[j]||a,e[f]=t[f]||y,e[s]=t[s]||y,e[w]=p(t[w]),e);return z(u),"undefined"!=typeof Node&&Z(Node.prototype),"undefined"!=typeof Element&&Z(Element.prototype),G(u),n=u,r=R.styleSheets,o=n[w],r&&setInterval(function(){var t=U(R.styleSheets,o);0<t.length&&Q(t,n)},250),F}catch(t){d.console&&console.error("[assetsRetry] error captured",t)}}});
+!function(e, t) {
+    'object' == typeof exports && 'undefined' != typeof module ? module.exports = t() : 'function' == typeof define && define.amd ? define(t) : (e = e || self).assetsRetry = t()
+}(this, function() {
+    'use strict'
+
+    function a(e) {
+        return e
+    }
+
+    function f() {
+    }
+
+    var m = 'retryTimes', v = 'succeeded', b = 'failed', E = 'maxRetryCount', c = 'onRetry',
+        s = 'onSuccess', u = 'onFail', d = 'domain', w = 'data-assets-retry-hooked',
+        j = 'data-assets-retry-ignore', l = 'data-retry-id', L = window, A = window.document,
+        t = L.HTMLElement, M = L.HTMLScriptElement, n = L.HTMLLinkElement, r = L.HTMLImageElement,
+        T = function(e, t, n) {
+            var r = e.indexOf(t)
+            return -1 === r ? e : e.substring(0, r) + n + e.substring(r + t.length)
+        }, x = function(t, e, n, r) {
+            void 0 === n && (n = f), void 0 === r && (r = !1)
+            var o, i, a, c, s, u = r || t.defer || t.async
+            'loading' !== A.readyState || /Edge|MSIE|rv:/i.test(navigator.userAgent) || u ? (o = A.createElement('script'), Object.keys(M.prototype).forEach(function(e) {
+                if ('src' !== e && t[e] && 'object' != typeof t[e]) try {
+                    o[e] = t[e]
+                } catch (e) {
+                }
+            }), o.src = e, o.onload = t.onload, o.onerror = t.onerror, o.setAttribute(l, y()), (i = t.getAttribute('nonce')) && o.setAttribute('nonce', i), A.getElementsByTagName('head')[0].appendChild(o)) : (a = y(), c = t.outerHTML.replace(/data-retry-id="[^"]+"/, '').replace(/src=(?:"[^"]+"|.+)([ >])/, l + '=' + a + ' src="' + e + '"$1'), A.write(c), (s = A.querySelector('script[' + l + '="' + a + '"]')) && (s.onload = n))
+        }, O = function(e) {
+            return e ? e instanceof t ? [e.nodeName, e.src, e.href, e.getAttribute(l)].join(';') : 'not_supported' : 'null'
+        }, y = function() {
+            return Math.random().toString(36).slice(2)
+        }, H = function(e) {
+            return e instanceof M || e instanceof r ? e.src : e instanceof n ? e.href : null
+        }, S = {}, k = function(e, t) {
+            var n, r = R(e, t), o = r[0], i = r[1]
+            return o ? (S[o] = S[o] || ((n = {})[m] = 0, n[b] = [], n[v] = [], n), [i, S[o]]) : []
+        }, R = function(e, t) {
+            var n, r, o, i, a = (n = e, r = t, Object.keys(r).filter(function(e) {
+                return -1 < n.indexOf(e)
+            }).sort(function(e, t) {
+                return t.length - e.length
+            })[0])
+            return a ? [(i = a, (o = e).substr(o.indexOf(i) + i.length, o.length)), a] : ['', '']
+        }, C = {}
+    return function(e) {
+        var t, y, g, o, p, h
+        void 0 === e && (e = {})
+        try {
+            if ('object' != typeof e[d]) throw new Error('opts.domain cannot be non-object.')
+            var n = [E, c, s, u, d], r = Object.keys(e).filter(function(e) {
+                return -1 === n.indexOf(e)
+            })
+            if (0 < r.length) throw new Error('option name: ' + r.join(', ') + ' is not valid.')
+            var i = ((t = {})[E] = e[E] || 3, t[c] = e[c] || a, t[s] = e[s] || f, t[u] = e[u] || f, t[d] = e[d], t)
+            return g = (y = i)[c], o = y[s], p = y[u], h = y[d], A.addEventListener('error', function(e) {
+                if (e) {
+                    var t = e.target || e.srcElement, n = H(t)
+                    if (n) {
+                        var r = k(n, h), o = r[0], i = r[1],
+                            a = t instanceof HTMLElement && t.hasAttribute(j)
+                        if (i && o && !a) {
+                            i[m]++, i[b].push(n)
+                            var c, s = i[m] > y[E]
+                            if (s && (c = R(n, h)[0], p(c)), h[o] && !s) {
+                                var u = h[o], f = T(n, o, u), d = g(f, n, i)
+                                if (null !== d) {
+                                    if ('string' != typeof d) throw new Error('a string should be returned in `onRetry` function')
+                                    var l = O(t)
+                                    C[l] || (C[l] = !0, t instanceof M && !t.getAttribute(w) && t.src && x(t, d, function() {
+                                        i[v].push(d)
+                                    }))
+                                }
+                            }
+                        }
+                    }
+                }
+            }, !0), A.addEventListener('load', function(e) {
+                var t, n, r
+                e && (t = e.target || e.srcElement, (n = H(t)) && t.getAttribute(l) && (r = R(n, h)[0], o(r)))
+            }, !0), S
+        } catch (e) {
+            L.console && console.error('[assetsRetry] error captured', e)
+        }
+    }
+})
 //# sourceMappingURL=assets-retry.umd.js.map

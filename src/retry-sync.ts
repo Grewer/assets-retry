@@ -1,31 +1,20 @@
-import {
-    stringReplace,
-    loadNextScript,
-    loadNextLink,
-    hashTarget,
-    randomString,
-    arrayFrom,
-    getCssRules,
-    getTargetUrl
-} from './util'
+import { getTargetUrl, hashTarget, loadNextScript, stringReplace } from './util'
 import { InnerAssetsRetryOptions } from './assets-retry'
 import { extractInfoFromUrl, splitUrl } from './url'
 import {
-    retryTimesProp,
+    doc,
+    domainProp,
     failedProp,
     hookedIdentifier,
-    succeededProp,
-    doc,
-    retryIdentifier,
+    ignoreIdentifier,
+    maxRetryCountProp,
+    onFailProp,
     onRetryProp,
     onSuccessProp,
-    onFailProp,
-    domainProp,
-    maxRetryCountProp,
+    retryIdentifier,
+    retryTimesProp,
     ScriptElementCtor,
-    LinkElementCtor,
-    ImageElementCtor,
-    ignoreIdentifier
+    succeededProp
 } from './constants'
 
 const retryCache: { [x: string]: boolean } = {}
@@ -45,7 +34,7 @@ export default function initSync(opts: InnerAssetsRetryOptions) {
     const domainMap = opts[domainProp]
     /**
      * capture error on window
-     * when js / css / image failed to load
+     * when js failed to load
      * reload the target with new domain
      *
      * @param {ErrorEvent} event
@@ -62,7 +51,7 @@ export default function initSync(opts: InnerAssetsRetryOptions) {
             return
         }
         const [currentDomain, currentCollector] = extractInfoFromUrl(originalUrl, domainMap)
-        const hasIgnoreIdentifier = target instanceof HTMLElement && target.hasAttribute(ignoreIdentifier);
+        const hasIgnoreIdentifier = target instanceof HTMLElement && target.hasAttribute(ignoreIdentifier)
         if (!currentCollector || !currentDomain || hasIgnoreIdentifier) {
             return
         }
@@ -106,15 +95,6 @@ export default function initSync(opts: InnerAssetsRetryOptions) {
             loadNextScript(target, userModifiedUrl, onloadCallback)
             return
         }
-        if (target instanceof LinkElementCtor && target.href) {
-            loadNextLink(target, userModifiedUrl, onloadCallback)
-            return
-        }
-        if (target instanceof ImageElementCtor && target.src) {
-            target.setAttribute(retryIdentifier, randomString())
-            target.src = userModifiedUrl
-            target.onload = onloadCallback
-        }
     }
 
     /**
@@ -135,26 +115,6 @@ export default function initSync(opts: InnerAssetsRetryOptions) {
         if ((target as HTMLElement).getAttribute(retryIdentifier)) {
             const [srcPath] = splitUrl(originalUrl, domainMap)
             onSuccess(srcPath)
-        }
-        // only handle link element
-        if (!(target instanceof LinkElementCtor)) {
-            return
-        }
-        const supportStyleSheets = doc.styleSheets
-        // do not support styleSheets API
-        if (!supportStyleSheets) {
-            return
-        }
-        const styleSheets = arrayFrom(doc.styleSheets) as any[]
-        const targetStyleSheet = styleSheets.filter(styleSheet => {
-            return styleSheet.href === (target as any).href
-        })[0]
-        const rules = getCssRules(targetStyleSheet)
-        if (rules === null) {
-            return
-        }
-        if (rules.length === 0) {
-            errorHandler(event)
         }
     }
 

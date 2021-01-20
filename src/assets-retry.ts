@@ -1,16 +1,14 @@
-import initAsync from './retry-async'
 import initSync from './retry-sync'
-import initCss from './retry-css'
-import { RetryStatistics, retryCollector } from './collector'
+import { retryCollector, RetryStatistics } from './collector'
 import {
+    domainProp,
     maxRetryCountProp,
+    onFailProp,
     onRetryProp,
     onSuccessProp,
-    onFailProp,
-    domainProp,
     win
 } from './constants'
-import { Domain, DomainMap, prepareDomainMap } from './url'
+import { Domain, DomainMap } from './url'
 import { identity, noop } from './util'
 
 export type RetryFunction = (
@@ -53,13 +51,9 @@ export default function init(opts: AssetsRetryOptions = {} as any) {
             [onRetryProp]: opts[onRetryProp] || identity,
             [onSuccessProp]: opts[onSuccessProp] || noop,
             [onFailProp]: opts[onFailProp] || noop,
-            [domainProp]: prepareDomainMap(opts[domainProp])
+            [domainProp]: opts[domainProp]
         }
-        initAsync(innerOpts)
         initSync(innerOpts)
-        if (__RETRY_IMAGE__) {
-            initCss(innerOpts)
-        }
         return retryCollector
     } catch (e) {
         win.console && console.error('[assetsRetry] error captured', e)
