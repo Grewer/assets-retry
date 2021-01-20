@@ -1,3 +1,17 @@
+## @grewer/assets-retry
+
+fork了原项目,做出了一下改变:
+
+1. 去除了 css, 图片 的加载错误
+> 此库是针对 cdn, 而 cdn 90%都是 js, css 的 cdn 显得有些鸡肋, 而且去除这些还压缩了体积
+   
+2. 去除了 onSuccess 事件
+> 因为一个网页会有很多链接, 如果每次加载成功都要进行 load 成功的事件处理, 也显示有些鸡肋
+> 同样的,去除此监听也减小了库的体积
+
+3. 关于 async 的暂时去除, 但是后续可能加入
+
+
 English | [简体中文](./README-cn.md)
 
 # Auto Assets Retry

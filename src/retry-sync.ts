@@ -10,8 +10,6 @@ import {
     maxRetryCountProp,
     onFailProp,
     onRetryProp,
-    onSuccessProp,
-    retryIdentifier,
     retryTimesProp,
     ScriptElementCtor,
     succeededProp
@@ -29,7 +27,6 @@ const retryCache: { [x: string]: boolean } = {}
  */
 export default function initSync(opts: InnerAssetsRetryOptions) {
     const onRetry = opts[onRetryProp]
-    const onSuccess = opts[onSuccessProp]
     const onFail = opts[onFailProp]
     const domainMap = opts[domainProp]
     /**
@@ -97,27 +94,5 @@ export default function initSync(opts: InnerAssetsRetryOptions) {
         }
     }
 
-    /**
-     * test is link element loaded in load event
-     *
-     * @param {Event} event
-     */
-    const loadHandler = function(event: Event) {
-        if (!event) {
-            return
-        }
-        const target = event.target || event.srcElement
-        const originalUrl = getTargetUrl(target)
-        if (!originalUrl) {
-            // not one of script / link / image element
-            return
-        }
-        if ((target as HTMLElement).getAttribute(retryIdentifier)) {
-            const [srcPath] = splitUrl(originalUrl, domainMap)
-            onSuccess(srcPath)
-        }
-    }
-
     doc.addEventListener('error', errorHandler, true)
-    doc.addEventListener('load', loadHandler, true)
 }

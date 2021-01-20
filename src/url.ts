@@ -62,7 +62,7 @@ export const extractInfoFromUrl = function(
 export const splitUrl = function(url: string, domainMap: DomainMap): [string, string] {
     const currentDomain = getCurrentDomain(url, domainMap)
     if (!currentDomain) {
-        return ['', '']
+        return [url, '']
     }
     const srcPath = getUrlPath(url, currentDomain)
     return [srcPath, currentDomain]
