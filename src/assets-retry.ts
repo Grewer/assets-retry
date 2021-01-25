@@ -1,13 +1,6 @@
 import initSync from './retry-sync'
 import { retryCollector, RetryStatistics } from './collector'
-import {
-    domainProp,
-    maxRetryCountProp,
-    onFailProp,
-    onRetryProp,
-    onSuccessProp,
-    win
-} from './constants'
+import { domainProp, maxRetryCountProp, onFailProp, onRetryProp, win } from './constants'
 import { Domain, DomainMap } from './url'
 import { identity, noop } from './util'
 
@@ -20,9 +13,8 @@ export type SuccessFunction = (currentPath: string) => void
 export type FailFunction = (currentPath: string) => void
 
 export interface AssetsRetryOptions {
-    [maxRetryCountProp]: number
+    [maxRetryCountProp]?: number
     [onRetryProp]?: RetryFunction
-    [onSuccessProp]?: SuccessFunction
     [onFailProp]?: FailFunction
     [domainProp]: Domain
 }
@@ -30,7 +22,6 @@ export interface AssetsRetryOptions {
 export interface InnerAssetsRetryOptions {
     [maxRetryCountProp]: number
     [onRetryProp]: RetryFunction
-    [onSuccessProp]: SuccessFunction
     [onFailProp]: FailFunction
     [domainProp]: DomainMap
 }
@@ -41,15 +32,9 @@ export default function init(opts: AssetsRetryOptions = {} as any) {
         if (typeof opts[domainProp] !== 'object') {
             throw new Error('opts.domain cannot be non-object.')
         }
-        const optionList = [maxRetryCountProp, onRetryProp, onSuccessProp, onFailProp, domainProp]
-        const invalidOptions = Object.keys(opts).filter(key => optionList.indexOf(key) === -1)
-        if (invalidOptions.length > 0) {
-            throw new Error('option name: ' + invalidOptions.join(', ') + ' is not valid.')
-        }
         const innerOpts: InnerAssetsRetryOptions = {
             [maxRetryCountProp]: opts[maxRetryCountProp] || 3,
             [onRetryProp]: opts[onRetryProp] || identity,
-            [onSuccessProp]: opts[onSuccessProp] || noop,
             [onFailProp]: opts[onFailProp] || noop,
             [domainProp]: opts[domainProp]
         }
