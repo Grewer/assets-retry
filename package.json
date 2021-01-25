@@ -3,7 +3,7 @@
   "version": "0.3.0",
   "description": "",
   "keywords": [],
-  "main": "dist/assets-retry.umd.js",
+  "main": "dist/assets-retry.js",
   "module": "dist/assets-retry.es5.js",
   "typings": "dist/types/assets-retry.d.ts",
   "files": [
