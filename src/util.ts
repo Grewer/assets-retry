@@ -1,6 +1,14 @@
-import { scriptTag, linkTag, doc, retryIdentifier, ScriptElementCtor, LinkElementCtor, ImageElementCtor, ElementCtor } from './constants'
+import {
+    doc,
+    ElementCtor,
+    LinkElementCtor,
+    linkTag,
+    retryIdentifier,
+    ScriptElementCtor,
+    scriptTag
+} from './constants'
 
-export const identity = function<T>(x: T): T {
+export const identity = function <T>(x: T): T {
     return x
 }
 export const noop = () => {
@@ -18,7 +26,7 @@ export const hasOwn = Object.prototype.hasOwnProperty
  * @param {*} args
  * @returns {R}
  */
-export const safeCall = function<T, R>(
+export const safeCall = function <T, R>(
     func: (this: T, ...callbackArgs: any[]) => R,
     thisArg: T,
     args: any
@@ -63,7 +71,7 @@ export const toSlug = function(str: string) {
  * @param {ArrayLike<T>} arrayLike
  * @returns {T[]}
  */
-export const arrayFrom = function<T>(arrayLike: Iterable<T> | ArrayLike<T>): T[] {
+export const arrayFrom = function <T>(arrayLike: Iterable<T> | ArrayLike<T>): T[] {
     return [].slice.call(arrayLike)
 }
 /**
@@ -76,8 +84,8 @@ export const collectPropertyNames = function(obj: any) {
     const getProto = Object.getPrototypeOf
         ? Object.getPrototypeOf
         : function(x: any) {
-              return x.__proto__
-          }
+            return x.__proto__
+        }
     let keys = Object.keys(obj)
     while (getProto(obj)) {
         keys = keys.concat(Object.keys(getProto(obj)))
@@ -131,7 +139,7 @@ export const loadNextScript = function(
     // when dealing with failed script tags in html,
     // use `document.write` to ensure the correctness
     // of loading order
-    const isAsyncScript = isAsync || $script.defer || $script.async;
+    const isAsyncScript = isAsync || $script.defer || $script.async
     // only use document.write for non-async scripts,
     // which includes script tag created by document.createElement
     // or with `defer` or `async` attribute
@@ -255,11 +263,8 @@ export const randomString = () =>
  * @param target
  */
 export const getTargetUrl = function(target: EventTarget | null) {
-    if (target instanceof ScriptElementCtor || target instanceof ImageElementCtor) {
+    if (target instanceof ScriptElementCtor) {
         return target.src
-    }
-    if (target instanceof LinkElementCtor) {
-        return target.href
     }
     return null
 }
