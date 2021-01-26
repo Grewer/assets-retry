@@ -17,14 +17,14 @@
         "emitDecoratorMetadata": true,
         "outDir": "dist/lib",
         "declaration": true,
+        "declarationDir": "src",
+        "declarationMap": false,
         "typeRoots": [
-            "node_modules/@types",
-            "./typings/*"
+            "node_modules/@types"
         ]
     },
     "include": [
         "src",
         "test",
-        "typings/*"
     ]
 }

@@ -1,6 +1,6 @@
 import resolve from '@rollup/plugin-node-resolve'
 import camelCase from 'lodash.camelcase'
-import typescript from '@rollup/plugin-typescript'
+import typescript from 'rollup-plugin-typescript2'
 import json from '@rollup/plugin-json'
 import { uglify } from 'rollup-plugin-uglify'
 
@@ -20,12 +20,12 @@ export default {
         include: 'src/**'
     },
     plugins: [
-        // Allow json resolution
         json(),
+        // Allow json resolution
         // Compile TypeScript files
         typescript({
             tsconfig: './tsconfig.json',
-            'declaration': true
+            useTsconfigDeclarationDir: false,
         }),
         // replace environment variables
         // replace({ __RETRY_IMAGE__: process.env.__RETRY_IMAGE__ }),
