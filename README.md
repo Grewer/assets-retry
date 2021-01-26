@@ -12,6 +12,12 @@ fork了原项目,做出了一下改变:
 3. 关于 async 的暂时去除, 但是后续可能加入
 
 
+下载:
+```
+npm i -D @grewer/assets-retry
+```
+
+
 English | [简体中文](./README-cn.md)
 
 # Auto Assets Retry
